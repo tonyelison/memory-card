@@ -24,9 +24,9 @@ const CardList = () => {
         const j = randomInt(i + 1);
         [list[i], list[j]] = [list[j], list[i]];
     }
-}
+  };
 
-  async function refreshList() {
+  const refreshList = async () => {
     return await api.getList()
       .then((list) => {
         const randomIndices = generateRandomIndices(list.count, 10 - blackList.length);
