@@ -29,7 +29,7 @@ const CardList = () => {
 
   const refreshList = async () => {
     setIsLoading(true)
-    return await api.getList()
+    await api.getList()
       .then(async (list) => {
         const randomIndices = generateRandomIndices(list.count, 10 - blackList.length);
         const newList = randomIndices.map((index) => list.results[index].name);
@@ -37,12 +37,11 @@ const CardList = () => {
         newList.push(...blackList);
         shuffle(newList);
 
-        const queryForEachId = () => newList.map(async (id) => await api.getById(id));
+        const queryForEachId = () => newList.map((id) => api.getById(id));
 
-        Promise.all(queryForEachId()).then((queriedList) => {
-          setCardList(queriedList);
-          setIsLoading(false)
-        });
+        const queriedList = await Promise.all(queryForEachId());
+        setCardList(queriedList);
+        setIsLoading(false);
       })
       .catch((error) => console.log(error));
   }
