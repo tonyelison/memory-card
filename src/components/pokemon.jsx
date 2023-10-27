@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import api from '../api.js'
 import humanize from '../util/humanize.js'
 
-const Pokemon = ({ id, blackList, setBlackList, refreshList }) => {
+const Pokemon = ({ id, blackList, addToBlackList, resetGame }) => {
   const [details, setDetails] = useState('');
 
   useEffect(() => {
@@ -21,13 +21,7 @@ const Pokemon = ({ id, blackList, setBlackList, refreshList }) => {
   }, [id]);
 
   const didClickCard = () => {
-    if (blackList.includes(details.name)) {
-      console.log('you lose');
-      return;
-    }
-    blackList.push(details.name);
-    setBlackList([...blackList]);
-    refreshList();
+    blackList.includes(details.name) ? resetGame() : addToBlackList(details.name);
   };
 
   return (

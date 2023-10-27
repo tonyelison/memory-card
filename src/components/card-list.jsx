@@ -3,35 +3,60 @@ import api from '../api.js'
 import Pokemon from './pokemon.jsx'
 
 const CardList = () => {
-  const [randomList, setRandomList] = useState([]);
+  const [shuffledList, setShuffledList] = useState([]);
   const [blackList, setBlackList] = useState([]);
+
+  const randomInt = (max) => Math.floor(Math.random() * max);
   
   const generateRandomIndices = (max, length) => {
     const indices = [];
     while (indices.length <= length) {
-      const randomInt = Math.floor(Math.random() * (max - 1));
-      if (!indices.includes(randomInt)) {
-        indices.push(randomInt);
+      const newIndex = randomInt(max - 1);
+      if (!indices.includes(newIndex)) {
+        indices.push(newIndex);
       }
     }
     return indices;
   };
 
-  function refreshList() {
-    api.getList()
+  const shuffleList = (list) => {
+    for (let i = list.length - 1; i > 0; i--) {
+        const j = randomInt(i + 1);
+        [list[i], list[j]] = [list[j], list[i]];
+    }
+}
+
+  async function refreshList() {
+    return await api.getList()
       .then((list) => {
         const randomIndices = generateRandomIndices(list.count, 10 - blackList.length);
         const newList = randomIndices.map((index) => list.results[index].name);
         
         newList.push(...blackList);
-        setRandomList(newList);
+        shuffleList(newList);
+        setShuffledList(newList);
       })
       .catch((error) => console.log(error));
   }
 
+  function addToBlackList(id) {
+    blackList.push(id);
+    setBlackList([...blackList]);
+    refreshList();
+  }
+
+  function resetGame() {
+    console.log('you lose');
+    blackList.length = 0;
+    setBlackList([]);
+    refreshList().then(() => {
+      console.log('game reset!');
+    });
+  }
+
   return (
     <>
-      {randomList.map((id) => <Pokemon key={id} id={id} blackList={blackList} setBlackList={setBlackList} refreshList={refreshList} />)}
+      {shuffledList.map((id) => <Pokemon key={id} id={id} blackList={blackList} addToBlackList={addToBlackList} resetGame={resetGame} />)}
       <button onClick={refreshList}>Refresh List</button>
     </>
   );
