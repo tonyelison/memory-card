@@ -2,4 +2,11 @@
   padding: 30px;
   box-shadow: 2px 2px 10px #00000025;
   width: min-content;
+
+  --sprite-size: 96px;
+}
+
+.pokemon-card img {
+  height: var(--sprite-size);
+  width: var(--sprite-size);
 }
