@@ -21,11 +21,11 @@ const Pokemon = ({ id, blackList, setBlackList, refreshList }) => {
   }, [id]);
 
   const didClickCard = () => {
-    if (blackList.includes(details.id)) {
+    if (blackList.includes(details.name)) {
       console.log('you lose');
       return;
     }
-    blackList.push(details.id);
+    blackList.push(details.name);
     setBlackList([...blackList]);
     refreshList();
   };

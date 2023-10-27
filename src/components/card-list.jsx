@@ -6,9 +6,9 @@ const CardList = () => {
   const [randomList, setRandomList] = useState([]);
   const [blackList, setBlackList] = useState([]);
   
-  const generateRandomIndices = (max) => {
-    const indices = [...blackList];
-    while (indices.length <= 10) {
+  const generateRandomIndices = (max, length) => {
+    const indices = [];
+    while (indices.length <= length) {
       const randomInt = Math.floor(Math.random() * (max - 1));
       if (!indices.includes(randomInt)) {
         indices.push(randomInt);
@@ -20,7 +20,11 @@ const CardList = () => {
   function refreshList() {
     api.getList()
       .then((list) => {
-        setRandomList(generateRandomIndices(list.count).map((index) => list.results[index].name));
+        const randomIndices = generateRandomIndices(list.count, 10 - blackList.length);
+        const newList = randomIndices.map((index) => list.results[index].name);
+        
+        newList.push(...blackList);
+        setRandomList(newList);
       })
       .catch((error) => console.log(error));
   }
