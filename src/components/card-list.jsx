@@ -1,6 +1,7 @@
 import { useState } from 'react'
+import '../styles/card-list.css'
 import api from '../api.js'
-import Pokemon from './pokemon.jsx'
+import Card from './card.jsx'
 
 const CardList = () => {
   const [cardList, setCardList] = useState([]);
@@ -68,13 +69,13 @@ const CardList = () => {
         name: item.name,
         'image-url': item.sprites['front_default'] || './public/decamark.png',
       };
-      return (<Pokemon key={item.id} details={details} blackList={blackList} addToBlackList={addToBlackList} resetGame={resetGame} />)
+      return (<Card key={item.id} details={details} blackList={blackList} addToBlackList={addToBlackList} resetGame={resetGame} />)
     })
   };
 
   return (
     <>
-      {isLoading ? <div>Loading...</div> : renderCardList()}
+      <div className="card-list">{isLoading ? "Loading..." : renderCardList()}</div>
       <button onClick={refreshList} disabled={isLoading}>Refresh List</button>
     </>
   );
