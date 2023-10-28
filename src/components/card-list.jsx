@@ -84,19 +84,25 @@ const CardList = () => {
     refreshList();
   }
 
-  const renderCardList = () => {
-    return cardList.map((item) => {
-      const details = {
-        id: item.id,
-        name: item.name,
-        'image-url': item.sprites['front_default'] || './public/decamark.png',
-      };
-      return (<Card key={item.id} details={details} addToBlackList={addToBlackList} />)
-    })
+  const renderGame = () => {
+    return (
+    <>
+      <div className="card-list">
+        {cardList.map((item) => {
+          const details = {
+            id: item.id,
+            name: item.name,
+            'image-url': item.sprites['front_default'] || './public/decamark.png',
+          };
+          return (<Card key={item.id} details={details} addToBlackList={addToBlackList} />)
+        })}
+      </div>
+      <button className="restart" onClick={resetGame} disabled={isLoading}>Restart</button>
+    </>);
   };
 
   return (
-    <div className="game">
+    <div className="container">
       {!isLoading && !cardList.length ?
         <div className="menu">
           <div>Choose Difficulty:</div>
@@ -106,10 +112,9 @@ const CardList = () => {
             <button onClick={() => setGameDifficulty('hard')}>Hard</button>
           </div>
         </div> :
-        <>
-          <div className={isLoading || cardList.length ? "card-list" : ""}>{isLoading ? "Loading..." : renderCardList()}</div>
-          <button onClick={resetGame} disabled={isLoading}>Restart</button>
-        </>
+        <div className="game">
+          {isLoading ? "Loading..." : renderGame()}
+        </div>
       }
     </div>
   );

@@ -14,7 +14,7 @@
 }
 
 .card:hover {
-  background-color: rgb(237, 255, 252);
+  background-color: var(--hover-color)
 }
 
 .card .name {
