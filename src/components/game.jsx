@@ -71,20 +71,24 @@ const Game = () => {
     blackList.length === listLength ? gameOver(true) : refreshList();
   }
 
-  const clearList = () => {
-    blackList.length = 0;
+  const clearCardList = () => {
     cardList.length = 0;
-    setBlackList([]);
     setCardList([]);
   }
 
+  const clearBlackList = () => {
+    blackList.length = 0;
+    setBlackList([]);
+  };
+
   const gameOver = (didWin) => {
     setGameResult(`You ${didWin ? 'Won' : 'Lose'}!`);
-    clearList();
+    clearCardList();
   }
 
   const resetGame = () => {
-    clearList();
+    clearCardList();
+    clearBlackList();
     setGameResult(null);
   }
 
@@ -101,6 +105,7 @@ const Game = () => {
           {isLoading ? "Loading..." :
           <>
             {gameResult ? <div>{gameResult}</div> : <CardList list={cardList} onCardClick={addToBlackList} />}
+            <div>Score: {blackList.length}/{listLength}</div>
             <button className="restart" onClick={resetGame} disabled={isLoading}>Restart</button>
           </>
           }
