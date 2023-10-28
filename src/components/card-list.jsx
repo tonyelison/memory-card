@@ -15,6 +15,7 @@ const CardList = () => {
   const [cardList, setCardList] = useState([]);
   const [blackList, setBlackList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [gameResult, setGameResult] = useState(null);
   
   const randomInt = (max) => Math.floor(Math.random() * max);
   
@@ -67,16 +68,20 @@ const CardList = () => {
     blackList.length === listLength ? gameOver(true) : refreshList();
   }
 
-  const resetGame = () => {
+  const clearList = () => {
     blackList.length = 0;
     setBlackList([]);
     setCardList([]);
-    console.log('game reset!');
   }
 
   const gameOver = (didWin) => {
-    console.log(`you ${didWin ? 'won!' : 'lose'}`);
-    resetGame();
+    setGameResult(`You ${didWin ? 'Won' : 'Lose'}!`);
+    clearList();
+  }
+
+  const resetGame = () => {
+    clearList();
+    setGameResult(null);
   }
 
   const setGameDifficulty = (setting) => {
@@ -97,13 +102,12 @@ const CardList = () => {
           return (<Card key={item.id} details={details} addToBlackList={addToBlackList} />)
         })}
       </div>
-      <button className="restart" onClick={resetGame} disabled={isLoading}>Restart</button>
     </>);
   };
 
   return (
     <div className="container">
-      {!isLoading && !cardList.length ?
+      {!isLoading && !cardList.length && !gameResult ?
         <div className="menu">
           <div>Choose Difficulty:</div>
           <div className="game-options">
@@ -113,7 +117,12 @@ const CardList = () => {
           </div>
         </div> :
         <div className="game">
-          {isLoading ? "Loading..." : renderGame()}
+          {isLoading ? "Loading..." :
+          <>
+            {gameResult ? <div>{gameResult}</div> : renderGame()}
+            <button className="restart" onClick={resetGame} disabled={isLoading}>Restart</button>
+          </>
+          }
         </div>
       }
     </div>
