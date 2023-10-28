@@ -42,7 +42,9 @@ const Game = () => {
     setIsLoading(true)
     await api.getList()
       .then(async (list) => {
-        const randomIndices = generateRandomIndices(list.count, listLength - blackList.length);
+        list.results = list.results.filter((item) => !blackList.includes(item.name));
+
+        const randomIndices = generateRandomIndices(list.results.length, listLength - blackList.length);
         const newList = randomIndices.map((index) => list.results[index].name);
         
         newList.push(...blackList);
@@ -71,6 +73,7 @@ const Game = () => {
 
   const clearList = () => {
     blackList.length = 0;
+    cardList.length = 0;
     setBlackList([]);
     setCardList([]);
   }
