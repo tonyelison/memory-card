@@ -8,7 +8,7 @@ const Card = ({ details, blackList, addToBlackList, resetGame }) => {
 
   return (
     <div className='card' onClick={didClickCard}>
-      <div>{humanize(details.name)}</div>
+      <div className='name'>{humanize(details.name)}</div>
       <img src={details['image-url']} />
     </div>
   );

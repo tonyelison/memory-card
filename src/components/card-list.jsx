@@ -3,16 +3,24 @@ import '../styles/card-list.css'
 import api from '../api.js'
 import Card from './card.jsx'
 
+const difficulty = {
+  easy: 4,
+  medium: 8,
+  hard: 12,
+};
+
 const CardList = () => {
   const [cardList, setCardList] = useState([]);
   const [blackList, setBlackList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  const listLength = difficulty.easy;
   
   const randomInt = (max) => Math.floor(Math.random() * max);
   
   const generateRandomIndices = (max, length) => {
     const indices = [];
-    while (indices.length <= length) {
+    while (indices.length < length) {
       const newIndex = randomInt(max - 1);
       if (!indices.includes(newIndex)) {
         indices.push(newIndex);
@@ -32,7 +40,7 @@ const CardList = () => {
     setIsLoading(true)
     await api.getList()
       .then(async (list) => {
-        const randomIndices = generateRandomIndices(list.count, 10 - blackList.length);
+        const randomIndices = generateRandomIndices(list.count, listLength - blackList.length);
         const newList = randomIndices.map((index) => list.results[index].name);
         
         newList.push(...blackList);
@@ -50,11 +58,12 @@ const CardList = () => {
   function addToBlackList(id) {
     blackList.push(id);
     setBlackList([...blackList]);
-    refreshList();
+    
+    blackList.length === listLength ? resetGame(true) : refreshList();
   }
 
-  function resetGame() {
-    console.log('you lose');
+  function resetGame(didWin) {
+    console.log(`you ${didWin ? 'won!' : 'lose'}`);
     blackList.length = 0;
     setBlackList([]);
     refreshList().then(() => {
@@ -75,7 +84,7 @@ const CardList = () => {
 
   return (
     <>
-      <div className="card-list">{isLoading ? "Loading..." : renderCardList()}</div>
+      <div className={isLoading || cardList.length ? "card-list" : ""}>{isLoading ? "Loading..." : renderCardList()}</div>
       <button onClick={refreshList} disabled={isLoading}>Refresh List</button>
     </>
   );
