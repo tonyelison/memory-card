@@ -5,16 +5,16 @@ import Card from './card.jsx'
 
 const difficulty = {
   easy: 4,
-  medium: 8,
-  hard: 12,
+  medium: 6,
+  hard: 10,
 };
+
+let listLength;
 
 const CardList = () => {
   const [cardList, setCardList] = useState([]);
   const [blackList, setBlackList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
-  const listLength = difficulty.easy;
   
   const randomInt = (max) => Math.floor(Math.random() * max);
   
@@ -59,16 +59,24 @@ const CardList = () => {
     blackList.push(id);
     setBlackList([...blackList]);
     
-    blackList.length === listLength ? resetGame(true) : refreshList();
+    blackList.length === listLength ? gameOver(true) : refreshList();
   }
 
-  function resetGame(didWin) {
-    console.log(`you ${didWin ? 'won!' : 'lose'}`);
+  const resetGame = () => {
     blackList.length = 0;
     setBlackList([]);
-    refreshList().then(() => {
-      console.log('game reset!');
-    });
+    setCardList([]);
+    console.log('game reset!');
+  }
+
+  function gameOver(didWin) {
+    console.log(`you ${didWin ? 'won!' : 'lose'}`);
+    resetGame();
+  }
+
+  const setGameDifficulty = (setting) => {
+    listLength = difficulty[setting];
+    refreshList();
   }
 
   const renderCardList = () => {
@@ -78,15 +86,27 @@ const CardList = () => {
         name: item.name,
         'image-url': item.sprites['front_default'] || './public/decamark.png',
       };
-      return (<Card key={item.id} details={details} blackList={blackList} addToBlackList={addToBlackList} resetGame={resetGame} />)
+      return (<Card key={item.id} details={details} blackList={blackList} addToBlackList={addToBlackList} gameOver={gameOver} />)
     })
   };
 
   return (
-    <>
-      <div className={isLoading || cardList.length ? "card-list" : ""}>{isLoading ? "Loading..." : renderCardList()}</div>
-      <button onClick={refreshList} disabled={isLoading}>Refresh List</button>
-    </>
+    <div className="game">
+      {!isLoading && !cardList.length ?
+        <div className="menu">
+          <div>Choose Difficulty:</div>
+          <div className="game-options">
+            <button onClick={() => setGameDifficulty('easy')}>Easy</button>
+            <button onClick={() => setGameDifficulty('medium')}>Medium</button>
+            <button onClick={() => setGameDifficulty('hard')}>Hard</button>
+          </div>
+        </div> :
+        <>
+          <div className={isLoading || cardList.length ? "card-list" : ""}>{isLoading ? "Loading..." : renderCardList()}</div>
+          <button onClick={resetGame} disabled={isLoading}>Restart</button>
+        </>
+      }
+    </div>
   );
 }
 

@@ -1,9 +1,9 @@
 import '../styles/card.css'
 import humanize from '../util/humanize.js'
 
-const Card = ({ details, blackList, addToBlackList, resetGame }) => {
+const Card = ({ details, blackList, addToBlackList, gameOver }) => {
   const didClickCard = () => {
-    blackList.includes(details.name) ? resetGame() : addToBlackList(details.name);
+    blackList.includes(details.name) ? gameOver() : addToBlackList(details.name);
   };
 
   return (
