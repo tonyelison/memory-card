@@ -1,13 +1,9 @@
 import '../styles/card.css'
 import humanize from '../util/humanize.js'
 
-const Card = ({ details, blackList, addToBlackList, gameOver }) => {
-  const didClickCard = () => {
-    blackList.includes(details.name) ? gameOver() : addToBlackList(details.name);
-  };
-
+const Card = ({ details, onClickHandler }) => {
   return (
-    <div className='card' onClick={() => addToBlackList(details.name)}>
+    <div className='card' onClick={() => onClickHandler(details.name)}>
       <div className='name'>{humanize(details.name)}</div>
       <img src={details['image-url']} />
     </div>

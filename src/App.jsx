@@ -1,9 +1,9 @@
 import './App.css'
-import CardList from './components/card-list.jsx'
+import Game from './components/game.jsx'
 
 const App = () => {
   return (
-    <CardList />
+    <Game />
   );
 }
 
