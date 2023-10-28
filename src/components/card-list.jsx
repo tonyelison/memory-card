@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import '../styles/card-list.css'
 import api from '../api.js'
+import Menu from './menu.jsx'
 import Card from './card.jsx'
 
 const difficulty = {
@@ -108,14 +109,7 @@ const CardList = () => {
   return (
     <div className="container">
       {!isLoading && !cardList.length && !gameResult ?
-        <div className="menu">
-          <div>Choose Difficulty:</div>
-          <div className="game-options">
-            <button onClick={() => setGameDifficulty('easy')}>Easy</button>
-            <button onClick={() => setGameDifficulty('medium')}>Medium</button>
-            <button onClick={() => setGameDifficulty('hard')}>Hard</button>
-          </div>
-        </div> :
+        <Menu setGameDifficulty={setGameDifficulty} /> :
         <div className="game">
           {isLoading ? "Loading..." :
           <>
