@@ -5,7 +5,7 @@ const Card = ({ details, onClickHandler }) => {
   return (
     <div className='card' onClick={() => onClickHandler(details.name)}>
       <div className='name'>{humanize(details.name)}</div>
-      <img src={details['image-url']} />
+      <img src={details['image-url'] || './src/assets/decamark.png'} />
     </div>
   );
 }

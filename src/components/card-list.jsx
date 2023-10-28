@@ -8,7 +8,7 @@ const CardList = ({ list, onCardClick }) => {
         const details = {
           id: item.id,
           name: item.name,
-          'image-url': item.sprites['front_default'] || './public/decamark.png',
+          'image-url': item.sprites['front_default'],
         };
         return (<Card key={item.id} details={details} onClickHandler={onCardClick} />)
       })}
