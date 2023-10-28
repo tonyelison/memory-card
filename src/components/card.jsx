@@ -7,7 +7,7 @@ const Card = ({ details, blackList, addToBlackList, gameOver }) => {
   };
 
   return (
-    <div className='card' onClick={didClickCard}>
+    <div className='card' onClick={() => addToBlackList(details.name)}>
       <div className='name'>{humanize(details.name)}</div>
       <img src={details['image-url']} />
     </div>

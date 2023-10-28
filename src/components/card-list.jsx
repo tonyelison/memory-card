@@ -56,6 +56,11 @@ const CardList = () => {
   }
 
   function addToBlackList(id) {
+    if (blackList.includes(id)) {
+      gameOver();
+      return;
+    }
+
     blackList.push(id);
     setBlackList([...blackList]);
     
@@ -69,7 +74,7 @@ const CardList = () => {
     console.log('game reset!');
   }
 
-  function gameOver(didWin) {
+  const gameOver = (didWin) => {
     console.log(`you ${didWin ? 'won!' : 'lose'}`);
     resetGame();
   }
@@ -86,7 +91,7 @@ const CardList = () => {
         name: item.name,
         'image-url': item.sprites['front_default'] || './public/decamark.png',
       };
-      return (<Card key={item.id} details={details} blackList={blackList} addToBlackList={addToBlackList} gameOver={gameOver} />)
+      return (<Card key={item.id} details={details} addToBlackList={addToBlackList} />)
     })
   };
 
